@@ -8,41 +8,28 @@ namespace COMP472_A_Search_Question
 {
     public class Node
     {
+        // Estimated cost to the goal
         public int heuristic;
-        public List<Tuple<int, Node>> operations = new List<Tuple<int, Node>>();
-        public List<Node> path = new List<Node>();
-        public Node parent;
 
-        public Node(int heuristic)
+        // A mapping of children nodes and their associated cost
+        public Dictionary<Node, int> operations = new Dictionary<Node, int>();
+
+        public string name;
+
+        public Node(int heuristic, string name)
         {
             this.heuristic = heuristic;
+            this.name = name;
         }
 
         public void MakeLink(int cost, Node node)
         {
-            operations.Add(new Tuple<int, Node>(cost, node));
+            operations.Add(node, cost);
         }
 
-        public int getCost(Node from)
+        public int getCostTo(Node child)
         {
-            if(from == this)
-            {
-                return 0;
-            }
-
-            if(parent == null && from == null)
-            {
-                throw new Exception();
-            }
-
-            int childCost = operations.First(x => x.Item2 == from).Item1;
-
-            if (parent == null)
-            {
-                return childCost;
-            }
-
-            return parent.getCost(this) + childCost;
+            return operations[child];
         }
     }
 }
